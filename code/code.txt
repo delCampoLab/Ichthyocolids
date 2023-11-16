@@ -1,0 +1,704 @@
+Sample: FLKeys_Api_9-3E_AMB_08312021
+DATE OF SEQUENCING: August 31st, 2021
+BASECALLED using Guppy-cpu on Pegasus, finished October 10th, 2021
+```
+#!/bin/bash
+#BSUB -J Guppy
+#BSUB -e guppy.err
+#BSUB -o guppy.out
+#BSUB -P coralma
+#BSUB -q general
+#BSUB -n 14
+#BSUB -W 168:00
+#BSUB -B
+#BSUB -N
+#BSUB -u EMAIL
+
+cd NANOPORE_HOME_DIRECTORY
+
+guppy_basecaller --compress_fastq -i FAST5_DIRECTORY -s NEW_BASECALL_FOLDER_IN_SCRATCH \
+--cpu_threads_per_caller 14 --num_callers 1  --flowcell FLO-MIN106 --kit SQK-LSK109
+```
+
+Total Reads Passing: 381,470
+Zipped File Size of Passed Reads (FLKeys_Api_9-3E.basecall.fastq): 1.7 GB
+
+## MiniScrub2 to correct Nanopore Reads. Used Docker on split fastq.gz files to work on desktop.
+Used fastqsplitter to split reads in two before scrubbing.
+```
+docker run --rm -it -v /Volumes/GoogleDrive/My\ Drive/Apicomplexans/Nanopore/FLKEYS_API_9-3E_AMB_08312021/data/:/app/workdir/ nlapier2/miniscrub-cpu
+python3 jgi-miniscrub/miniscrub.py workdir/FLKeys_Api_9-3E.basecall.1.fastq.gz --compression gzip --verbose  --output /Volumes/datasets/Nanopore/FLKeys_Api_9-3E_AMB_08312021/basecalled_gen/pass/FLKeys_Api_9-3E.basecall.1.scrubbed.fastq.gz --processes 1
+python3 jgi-miniscrub/miniscrub.py workdir/FLKeys_Api_9-3E.basecall.1.fastq.gz --compression gzip --verbose  --output /Volumes/datasets/Nanopore/FLKeys_Api_9-3E_AMB_08312021/basecalled_gen/pass/FLKeys_Api_9-3E.basecall.2.scrubbed.fastq.gz --processes 1
+```
+
+**Porechop & filter**
+
+After this I will extract host reads!
+Will download Genome for Salarias fasciatus (lawnmower/jewelled blenny) to extract fish reads. This mapped to most contigs I blasted.
+- GCF_902148845.1_fSalaFa1.1_genomic.fna.gz
+
+```
+#!/bin/bash
+#BSUB -J buildDB
+#BSUB -e bt2.err
+#BSUB -o bt2.out
+#BSUB -P coralma
+#BSUB -q general
+#BSUB -n 14
+#BSUB -W 168:00
+#BSUB -B
+#BSUB -N
+#BSUB -u amb195@miami.edu
+
+module load bowtie2/2.2.6
+
+cd /nethome/baw117/nanopore/data/
+
+bowtie2-build -f /nethome/baw117/nanopore/data/GCF_902148845.1_fSalaFa1.1_genomic.fna SalaFa
+```
+
+```
+#!/bin/bash
+#BSUB -J bt2_2
+#BSUB -e bt2-2.err
+#BSUB -o bt2-2.out
+#BSUB -P coralma
+#BSUB -q general
+#BSUB -n 14
+#BSUB -W 168:00
+#BSUB -B
+#BSUB -N
+#BSUB -u amb195@miami.edu
+
+module load bowtie2/2.2.6
+
+cd /nethome/baw117/nanopore/
+
+bowtie2 -x data/SalaFa -q data/FLKeys_Api_9-3E.basecall.scrubbed.filtered.fastq -S FLKeys_Api_9-3E.basecall.scrubbed.filtered.SalaFa.sam
+```
+
+```
+samtools view -S -h -f4 sample.sam > sample.unmapped.sam
+cut -f1 sample.unmapped.sam | sort | uniq > sample.unmapped_IDs.lst
+seqtk subseq library1.forward.fastq sample.unmapped_IDs.lst > library1_1_unmapped.fastq
+grep -c "+" forward_non_mappers.fastq > read_count.txt
+```
+701459 reads to assemble into a metagenome! 
+
+NOW assemble with metaFlye!
+```
+#!/bin/bash
+#BSUB -J Flye
+#BSUB -e flye.err
+#BSUB -o flye.out
+#BSUB -P coralma
+#BSUB -q bigmem
+#BSUB -n 16
+#BSUB -W 120:00
+#BSUB -B
+#BSUB -N
+#BSUB -u amb195@miami.edu
+
+source /nethome/baw117/miniconda3/etc/profile.d/conda.sh
+
+conda activate flye
+
+cd ~/nanopore
+
+flye --nano-hq /nethome/baw117/nanopore/analysis/FLKeys_Api_9-3E.basecall.scrubbed.filtered.SalaFa.unmapped.fastq --out-dir analysis/FLYE_unmapped --threads 16 --meta
+```
+Then metawrap:
+```
+#!/bin/bash
+#BSUB -J Metawrap-Ofav
+#BSUB -e mw.err
+#BSUB -o mw.out
+#BSUB -P coralma
+#BSUB -q bigmem
+#BSUB -n 16
+#BSUB -R "rusage[mem=15600]"
+#BSUB -W 120:00
+#BSUB -B
+#BSUB -N
+#BSUB -u amb195@miami.edu
+
+source /nethome/baw117/miniconda3/etc/profile.d/conda.sh
+
+conda activate metawrap-env
+
+cd ~/metawrap
+
+metawrap binning -o /projects/scratch/coralma/metawrap/INITIAL_BINNING_unmapped -t 16 -a /nethome/baw117/nanopore/analysis/FLYE_unmapped/assembly.fasta --metabat2 --maxbin2 --concoct --universal --single-end /nethome/baw117/nanopore/analysis/FLKeys_Api_9-3E.basecall.scrubbed.filtered.SalaFa.unmapped.fastq -l 500bp --universal -m 100
+```
+
+# Contaminant Analysis:
+Will be using raw scrubbed reads for this.
+
+## KAT (https://kat.readthedocs.io/en/latest/walkthrough.html)
+```
+kat gcp ../../data/FLKeys_Api_9-3E.basecall.scrubbed.filtered.fastq
+```
+
+## SIDR
+Make alignment fo raw reads to assembly with BWA-MEM
+```
+bwa index ../../FLYE_scrubbed/assembly.fasta.gz
+```
+Map
+```
+bwa mem -t 3 -x ont2d ../../FLYE_scrubbed/assembly.fasta.gz ~/workdir/basecall/ONT.fastq.gz | samtools view - -Sb | samtools sort - -@14 > mapping.sorted.bam
+```
+Make index
+```
+samtools index mapping.sorted.bam
+```
+
+Blast: https://sidr.readthedocs.io/en/latest/dataprep.html 
+```
+blastn -task megablast -query ../../FLYE_scrubbed/assembly.fasta -db /Volumes/databases/NCBI/nt/nt  -outfmt '6 qseqid staxids' -culling_limit 5 -evalue 1e-25 -out mapped.blast.out 
+blastn -task megablast -query ../../FLYE_scrubbed/assembly.fasta -db nt_dir/nt  -outfmt '6 qseqid staxids' -culling_limit 5 -evalue 1e-25 -out mapped.blast.out
+```
+SIDR:
+````
+sidr default -d /Volumes/GoogleDrive/My\ Drive/Apicomplexans/Nanopore/FLKEYS_API_9-3E_AMB_08312021/analysis/scrubbed_analysis/contaminant_analysis/SIDR \
+-b mapping.sorted.bam \
+-f /Volumes/GoogleDrive/My\ Drive/Apicomplexans/Nanopore/FLKEYS_API_9-3E_AMB_08312021/analysis/scrubbed_analysis/FLYE_scrubbed/assembly.fasta \
+-r mapped.blast.out \
+-k tokeep.contigids \
+-x toremove.contigids \
+-t chordata
+````
+Contig 9376 = Api Mito Genome
+Contig 9341 = Proteobacteria 
+
+
+https://github.com/BamaComputationalBiology/DecisionTree/tree/master/blobology_and_kraken
+
+
+## Blobology
+```
+gmap_build -d 9-3E -D gmap_dir/ /Volumes/GoogleDrive/My\ Drive/Apicomplexans/Nanopore/FLKEYS_API_9-3E_AMB_08312021/analysis/scrubbed_analysis/FLYE_scrubbed/assembly.fasta
+gsnap -B 5 -t 2 -A sam -N 1 -n 1 -d 9-3E -D gmap_dir/ FLKeys_Api_9-3E.basecall.scrubbed.filtered.fastq > 9-3E.sam
+samtools view -bS 9-3E.sam > 9-3E.bam
+samtools sort 9-3E.bam -o 9-3E_sorted.bam
+samtools index 9-3E_sorted.bam
+```
+
+
+```
+blastn \
+-task megablast \
+-query /Volumes/GoogleDrive/My\ Drive/Apicomplexans/Nanopore/FLKEYS_API_9-3E_AMB_08312021/analysis/scrubbed_analysis/FLYE_scrubbed/assembly.fasta \
+-db /Volumes/databases/NCBI/nt/nt \
+-outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' \
+-culling_limit 5 \
+-num_threads 8 \
+-evalue 1e-25 \
+-out blob.blast
+```
+### Generate Blob Plot now
+```
+blobtools create -i /Volumes/GoogleDrive/My\ Drive/Apicomplexans/Nanopore/FLKEYS_API_9-3E_AMB_08312021/analysis/scrubbed_analysis/FLYE_scrubbed/assembly.fasta --nodes nodes.dmp --names names.dmp -t blob.blast -b ../../9-3E_sorted.bam
+blobtools plot -i blobDB.json
+blobtools view -i blobDB.json
+```
+Edit the below code to work with your parameters: "GC", and "bam0" (coverage)
+```
+cat view.blobDB.table.txt | awk '$3 < 0.45' | awk '$5 > 2' | awk '{print $1}' > tokeep.contigids # Example characteristics
+```
+
+
+# EukRep to seperate contigs first then bin!
+````
+EukRep -i /Volumes/GoogleDrive/My\ Drive/Apicomplexans/Nanopore/FLKEYS_API_9-3E_AMB_08312021/analysis/scrubbed_analysis/FLYE_scrubbed/assembly.fasta -o scrubebd_euk_metagenome.fa --prokarya scrubebd_prok_metagenome.fa --min 500
+
+````
+
+
+# Re-run with illumina reads included
+## trimmed
+```
+#!/bin/bash
+#BSUB -J fastp
+#BSUB -e fastp.err
+#BSUB -o fastp.out
+#BSUB -P coralma
+#BSUB -q bigmem
+#BSUB -n 16
+#BSUB -R "rusage[mem=15000]"
+#BSUB -W 120:00
+#BSUB -B
+#BSUB -N
+#BSUB -u amb195@miami.edu
+
+source /nethome/baw117/miniconda3/etc/profile.d/conda.sh
+
+conda activate fastp
+
+cd /scratch/projects/coralma/9E
+
+fastp -i 9-3E_S20_all_R1_001.fastq.gz -I 9-3E_S20_all_R2_001.fastq.gz -o 9-3E_S20_all_R1_001.trimmed.fastq.gz -O 9-3E_S20_all_R2_001.trimmed.fastq.gz --disable_length_filtering --correction --thread 12 
+
+```
+
+## Assembled
+```
+#!/bin/bash
+#BSUB -J OMS
+#BSUB -e OMS.err
+#BSUB -o OMS.out
+#BSUB -P coralma
+#BSUB -q bigmem
+#BSUB -n 1
+#BSUB -R "rusage[mem=250000]"
+#BSUB -W 120:00
+#BSUB -B
+#BSUB -N
+#BSUB -u amb195@miami.edu
+
+source /nethome/baw117/miniconda3/etc/profile.d/conda.sh
+
+conda activate OPERA-MS
+
+module load java
+
+export _JAVA_OPTIONS=-Xmx51200000000
+
+cd /scratch/projects/coralma/9E
+
+perl /nethome/baw117/miniconda3/envs/OPERA-MS/OPERA-MS/OPERA-MS.pl \
+    --genome-db /nethome/baw117/miniconda3/envs/OPERA-MS/OPERA-MS/OPERA-MS-DB \
+    --contig-file /scratch/projects/coralma/9E/megahit/9E_megahit.contigs.fa \
+    --short-read1 9-3E_S20_all_R1_001.trimmed.fastq.gz  \
+    --short-read2 9-3E_S20_all_R2_001.trimmed.fastq.gz  \
+    --long-read FLKeys_Api_9-3E.basecall.fastq \
+    --num-processors 10 \
+    --out-dir RESULTS_1Node 2> log_OMS.err
+
+```
+
+## Binned
+```
+#!/bin/bash
+#BSUB -J Metawrap-9E
+#BSUB -e mw_9E.err
+#BSUB -o mw_9E.out
+#BSUB -P coralma
+#BSUB -q bigmem
+#BSUB -n 16
+#BSUB -R "rusage[mem=15600]"
+#BSUB -W 120:00
+#BSUB -B
+#BSUB -N
+#BSUB -u amb195@miami.edu
+
+source /nethome/baw117/miniconda3/etc/profile.d/conda.sh
+
+conda activate metawrap-env
+
+cd /scratch/projects/coralma/9E
+
+metawrap binning -o 9E_Hybrid_binning -t 16 -a /scratch/projects/coralma/9E/RESULTS_1Node/contigs.polished.fasta \
+--metabat2 --maxbin2 --concoct --universal --single-end FLKeys_Api_9-3E.basecall.fastq \
+--universal 9-3E_S20_all_R1_001.trimmed.fastq.gz 9-3E_S20_all_R2_001.trimmed.fastq.gz
+
+```
+
+Use MTAGS to find SSU
+```
+conda activate mtags
+
+mtags profile -f 9-3E_S20_alltrimmed_R1.fastq.gz -r 9-3E_S20_alltrimmed_R2.fastq.gz -s ../data/FLKeys_Api_9-3E.basecall.fastq -o mTAGs_results -s 9E
+
+```
+
+The following bins have Api reads:
+bin.105.fa
+bin.12.fa
+bin.200.fa
+bin.226.fa
+bin.241.fa
+bin.60.fa
+bin.81.fa
+
+
+
+## New approach for Organelle Assembly (GetOrganelle)
+```
+#!/bin/bash
+#BSUB -J get-organelle
+#BSUB -e gorg.err
+#BSUB -o gorg.out
+#BSUB -P coralma
+#BSUB -q bigmem
+#BSUB -n 1
+#BSUB -R "rusage[mem=250000]"
+#BSUB -W 120:00
+#BSUB -B
+#BSUB -N
+#BSUB -u amb195@miami.edu
+
+source /nethome/baw117/miniconda3/etc/profile.d/conda.sh
+
+conda activate apicoplast
+
+cd /scratch/projects/coralma/9E/api_reads
+
+get_organelle_from_reads.py -s 9E_apicoplast_contig5734.fa -1 9-3E_S20_alltrimmed_R1.fastq.gz -2 9-3E_S20_alltrimmed_R2.fastq.gz -o 9E_apicoplast_getorganelle -R 15 -k 21,45,65,85,105 -F other_pt --memory-save --overwrite --reduce-reads-for-coverage inf --max-reads 500000000
+```
+
+MFANNOT for annotation
+
+
+Protein prediciton
+
+```
+pyrodigal -i contigs.polished.fasta -a contigs.polished.pyrodigal.aa.fasta -p meta
+
+```
+
+# Trees
+## Mitochondrial Genes
+Mitochondrial Phylogeny Construction for Apicomplexan derived from blenny blood
+#### INFO
+Opera contig 15570 from the polished metagenomic assembly is closely related to the mitochondrion of the corallicolids.
+
+MITOS was run to derive the genes in this mitochondrial genomic sequence
+
+Now I build a tree using various apicomplexans and close matches in BLAST and the following genes: Cox1, Cox3, & Cob
+#### Procedure
+Species to include:
+>9E_Fish_Api_cox1
+>YP_010035343.1 cox1 [organism=Theileria lestoquardi] [GeneID=63382906]
+>YP_009305216.1 cox1 [organism=Babesia microti] [GeneID=29141170]
+>YP_002726257.1 cox1 [organism=Plasmodium fragile] [GeneID=7668573]
+>YP_272029.1 cox1 [organism=Plasmodium knowlesi] [GeneID=3562402]
+>YP_272032.1 cox1 [organism=Plasmodium simium] [GeneID=3562410]
+>XP_013232209.1 ETH_00034615 [organism=Eimeria tenella] [GeneID=25255981]
+>Hematodinium sp. mitochondrial mRNA for cytochrome oxidase subunit I (cox1 gene), clone 1
+>Symbiodinium minutum mitochondrial cox1 gene for cytochrome oxidase subunit 1, complete cds, strain: Mf 1.05b.01
+>YP_008519459.1 cox1 [organism=Nannochloropsis oceanica] [GeneID=16791492]
+>NP_062482.1 cox1 [organism=Chondrus crispus] [GeneID=809360]
+>YP_009686461.2 F0Q77_mgp03 [organism=Hepatozoon catesbianae] [GeneID=41661146]
+>YP_010213999.1 LK316_mgp02 [organism=Klossia helicina] [GeneID=68657911]
+>YP_010213996.1 LK113_mgp02 [organism=Klossia razorbacki] [GeneID=68657879]
+>XP_013232209.1 ETH_00034615 [organism=Eimeria tenella] [GeneID=25255981]
+>AXQ37352.1 cytochrome c oxidase subunit I [Apicomplexa sp. WK-2018_Corallicola]
+>QTY32161.1 cytochrome c oxidase subunit I, partial [Corallicolida sp.]
+>AXQ37355.1 cytochrome c oxidase subunit I [Apicomplexa sp. WK-2018_Corallicola]
+>QTY32158.1 cytochrome c oxidase subunit I, partial [Corallicolida sp.]
+>QJD07184.1 cytochrome c oxidase subunit I [Apicomplexa sp. corallicolid ex Leiopathes glaberrima]
+>AXQ37358.1 cytochrome c oxidase subunit I [Apicomplexa sp. WK-2018_Corallicola]
+>YP_010213999.1 cytochrome c oxidase subunit I [Klossia helicina]
+>YP_010213996.1 cytochrome c oxidase subunit I [Klossia razorbacki]
+>WDY83433.1 cytochrome c oxidase subunit I [Klossia sp. JRBarta-2022a]
+>AZL31646.1 cytochrome c oxidase subunit I [Klossiella equi]
+>YP_001542424.1 cytochrome c oxidase subunit I, partial [Plasmodium floridense]
+
+**Note Chromera velia and Vitrella brassicaformis were excluded from mito phylogeny in kwong et al 2019
+
+All created. Now I need to align with MUSCLE then Concatenate
+```
+muscle -in cox1.faa -out cox1.aligned.faa 
+
+muscle -in cob.faa -out cob.aligned.faa 
+
+muscle -in cox3.faa -out cox3.aligned.faa 
+```
+
+Used Concatenator GUI (https://academic.oup.com/bioinformaticsadvances/article/2/1/vbac050/6647915) to combine alignments.
+
+Built tree on Triton using this job script
+```
+#!/bin/bash
+
+#BSUB -J raxml
+#BSUB -q normal
+#BSUB -n 30
+#BSUB -W 168:00
+#BSUB -u amb195@miami.edu
+#BSUB -o raxml.out
+#BSUB -e raxml.err
+
+###################################################################
+
+spack load raxml
+
+cd /scratch/marinemicrobes_t/mito
+
+[amb195@login1 mito]$ concatenated_api_mito.faa.fas
+
+mpirun raxmlHPC-MPI -T 30 -m PROTGAMMAMTZOA -p 31415 -x 20398 -d -f a -N 1000 -n 9E_api_mito_tree1 -s concatenated_api_mito.faa.fas
+
+```
+
+Looks great, lets see if we can add:
+Cyclospora caytanensis
+Isospora picoflavae
+Eimeria legionensis
+Lankesterella sp. Guelph2013 isolate B
+Leucocytozoon majoris
+Parahaemoproteus vireonis
+Besnoitia besnoiti
+Haemogregarina sp
+
++ sequences from Mathur et al.
+
+```
+muscle -in cox1.faa.aln -out cox1.aligned.faa 
+
+muscle -in cob.faa.aln -out cob.aligned.faa 
+
+muscle -in cox3.faa.aln -out cox3.aligned.faa 
+```
+
+Used Concatenator GUI (https://academic.oup.com/bioinformaticsadvances/article/2/1/vbac050/6647915) to combine alignments.
+
+Built tree on Triton using this job script
+```
+#!/bin/bash
+
+#BSUB -J raxml
+#BSUB -q normal
+#BSUB -n 60
+#BSUB -W 168:00
+#BSUB -u amb195@miami.edu
+#BSUB -o raxml.out
+#BSUB -e raxml.err
+
+###################################################################
+
+spack load raxml
+
+cd /scratch/marinemicrobes_t/mito
+
+mpirun raxmlHPC-MPI -T 60 -m PROTGAMMAMTZOA -p 31415 -x 20398 -d -f a -N 1000 -n 9E_api_mito_tree3 -s concatenated_api_mito_tree3.faa.fas
+
+```
+
+#### Now add more corallicolids + a haemogreagrine
+
+```
+muscle -in cox1.faa.aln -out cox1.aligned.faa 
+
+muscle -in cob.faa.aln -out cob.aligned.faa 
+
+muscle -in cox3.faa.aln -out cox3.aligned.faa 
+```
+
+Used Concatenator GUI (https://academic.oup.com/bioinformaticsadvances/article/2/1/vbac050/6647915) to combine alignments.
+
+Built tree on Triton using this job script
+```
+#!/bin/bash
+
+#BSUB -J raxml
+#BSUB -q normal
+#BSUB -n 60
+#BSUB -W 168:00
+#BSUB -u amb195@miami.edu
+#BSUB -o raxml.out
+#BSUB -e raxml.err
+
+###################################################################
+
+spack load raxml
+
+cd /scratch/marinemicrobes_t/mito
+
+mpirun raxmlHPC-MPI -T 60 -m PROTGAMMAMTZOA -p 31415 -x 20398 -d -f a -N 1000 -n 9E_api_mito_tree3 -s concatenated_api_mito_tree3.faa.fas
+
+```
+
+
+## rRNA
+###INFO
+Incorporated seqs from Kwong et al and Jamy et al
+```
+vsearch -sortbylength api_18S_28S_tree.fa -output api_18S_28S_tree.sorted.fa -minseqlength 500 -maxseqlength 15000
+vsearch -cluster_smallmem api_18S_28S_tree.sorted.fa -id 0.98 -centroids api_18S_28S_tree.clustered.fa -uc api_18S_28S_tree.clustered.uc 
+mafft --auto api_18S_28S_tree.clustered.fa > api_18S_28S_tree.aligned.fa
+trimal -in api_18S_28S_tree.aligned.fa -out api_18S_28S_tree.trimal.fa -gt 0.3 -st 0.001 -cons 30
+raxmlHPC -T 2 -m GTRCAT -p 31415 -x 20398 -d -f a -N 1000 -n api_18S_28S_tree.tre -s api_18S_28S_tree.trimal.fa
+```
+
+## Apicoplast
+### SSU
+#### INFO
+Combine prior SSU info from Janouskovec papers + Kwong + Javi Dataset
+```
+vsearch -sortbylength out.fa -output Jan_seqs_plusmore.sorted.fa -minseqlength 400 --maxseqlength 2500
+vsearch -cluster_smallmem Jan_seqs_plusmore.sorted.fa -id 0.995 -centroids Jan_seqs_plusmore.clustered.fa -uc Jan_seqs_plusmore.clustered.uc
+mafft --auto Jan_seqs_plusmore.sorted.fa  > Jan_seqs_plusmore.aligned.fa
+trimal -in Jan_seqs_plusmore.aligned.fa -out Jan_seqs_plusmore.trim.fa -gt 0.3 -st 0.001 -cons 30
+
+```
+Run raxml on Triton
+```
+#!/bin/bash
+#BSUB -J raxml
+#BSUB -q normal
+#BSUB -n 30
+#BSUB -W 168:00
+#BSUB -u amb195@miami.edu
+#BSUB -o raxml.out
+#BSUB -e raxml.err
+
+###################################################################
+
+spack load raxml
+
+cd /scratch/marinemicrobes_t/ssu
+
+mpirun raxmlHPC-MPI -T 30 -m GTRGAMMA -p 31415 -x 20398 -d -f a -N 1000 -n 9E_api_plastid_ssu_tree -s Jan_seqs_plusmore.trim.fa
+```
+
+## Apicoplast Genes Tree
+Apicoplast Phylogenetics
+
+Download genbanks from variety of sources combining Mathur and Kwong Papers
+
+```
+python download_genbank.py
+```
+
+Ran the below script to convert the genbanks to annotated fastas
+```
+from Bio import SeqIO
+import os
+
+directory = "path/to/genbank/files"
+output_directory = "output_fasta"
+
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+
+for filename in os.listdir(directory):
+    if filename.endswith(".gb") or filename.endswith(".gbk"):
+        file_path = os.path.join(directory, filename)
+
+        records = SeqIO.parse(file_path, "genbank")
+
+        for i, record in enumerate(records):
+            output_file = f"{filename.split('.')[0]}_{i+1}.fasta"
+            output_path = os.path.join(output_directory, output_file)
+
+            with open(output_path, "w") as fasta_file:
+                for feature in record.features:
+                    if feature.type == "CDS" and "translation" in feature.qualifiers:
+                        gene_name = feature.qualifiers.get("gene", ["Unknown"])[0]
+
+                        if gene_name == "Unknown":
+                            gene_name = feature.qualifiers.get("locus_tag", ["Unknown"])[0]
+
+                        if gene_name == "Unknown":
+                            gene_name = feature.qualifiers.get("product", ["Unknown"])[0]
+
+                        sequence = feature.qualifiers["translation"][0]
+
+                        header = f">{gene_name} [{filename}]"
+                        fasta_file.write(f"{header}\n{sequence}\n")
+
+```
+
+Extract gene files and rename them to taxa name for genes in more than 10 taxa
+```
+import os
+from Bio import SeqIO
+
+# List of FASTA files for each species
+fasta_files = [ "AB649417_1.fasta",  "AB649420_1.fasta",  "AB649423_1.fasta",  "AY217738_1.fasta",  "HF562234_1.fasta",  "HM222967_1.fasta",  "HM222968_1.fasta",  "JQ437257_1.fasta",  "KJ877675_1.fasta",  "KL558887_1.fasta",  "KP866208_1.fasta",  "KX189066_1.fasta",  "LK023130_1.fasta",  "LK028575_1.fasta",  "LR605956_1.fasta",  "MH304845_1.fasta",  "MH557086_1.fasta",  "MK573199_1.fasta",  "MK770339_1.fasta",  "MK962129_1.fasta",  "NC_000925_1.fasta",  "NC_004823_1.fasta",  "NC_007758_1.fasta",  "NC_008589_1.fasta",  "NC_011395_1.fasta",  "NC_014345_1.fasta",  "NC_016735_1.fasta",  "NC_022667_1.fasta",  "NC_026851_1.fasta",  "NC_028029_1.fasta",  "NC_031401_1.fasta",  "NC_031963_1.fasta",  "NW_004675960_1.fasta",  "NW_019223693_1.fasta",  "NW_021703914_1.fasta", "U87145_1.fasta", "Siedleckia_1.fasta", "Rhytidocystis_sp_WS2_1.fasta", "Rhytidocystis_sp_WS1_1.fasta", "Merocystis_kathae_1.fasta", "Margolisiella_islandica_1.fasta", "Eleutheroschizon_1.fasta", "Aggregata_octopiana_1.fasta"]
+
+# Dictionary to store the shared genes
+shared_genes = {}
+
+# Read each FASTA file and extract shared genes
+for fasta_file in fasta_files:
+    # Extract the species name from the file name
+    species_name = fasta_file.split(".")[0]
+
+    # Read the FASTA file
+    for record in SeqIO.parse(fasta_file, "fasta"):
+        gene_name = record.id
+        
+        # Check if the gene is already present in the shared genes dictionary
+        if gene_name in shared_genes:
+            shared_genes[gene_name][species_name] = str(record.seq)
+        else:
+            shared_genes[gene_name] = {species_name: str(record.seq)}
+
+# Create a new directory called "genes" if it doesn't exist
+output_directory = "genes"
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+
+# Create separate FASTA files for genes appearing in more than five taxa and place them in the "genes" directory
+for gene_name, sequences in shared_genes.items():
+    if len(sequences) > 10:
+        output_file = os.path.join(output_directory, gene_name + ".fasta")
+        
+        with open(output_file, "w") as f:
+            for species_name, sequence in sequences.items():
+                header = ">" + species_name + "\n"
+                f.write(header)
+                f.write(sequence)
+                f.write("\n")
+
+```
+
+```
+import os
+import subprocess
+
+# Specify the directory containing the FASTA files
+fasta_directory = "genes"
+
+# Create a directory to store the aligned FASTA files
+output_directory = "aligned_files"
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+
+# Get the list of FASTA files in the directory
+fasta_files = os.listdir(fasta_directory)
+
+# Run MUSCLE on each FASTA file and output the aligned sequences
+for fasta_file in fasta_files:
+    # Set the input and output file paths
+    input_file = os.path.join(fasta_directory, fasta_file)
+    output_file = os.path.join(output_directory, os.path.splitext(fasta_file)[0] + ".aligned.fa")
+    
+    # Run MUSCLE command
+    muscle_command = ["muscle", "-in", input_file, "-out", output_file]
+    subprocess.run(muscle_command, check=True)
+
+    print(f"Alignment created for {fasta_file}: {output_file}")
+
+```
+
+Concatenate then run on super-computer
+
+```
+#!/bin/bash
+
+#BSUB -J raxml_api_genes
+#BSUB -q normal
+#BSUB -n 60
+#BSUB -W 168:00
+#BSUB -u amb195@miami.edu
+#BSUB -o raxml.out
+#BSUB -e raxml.err
+
+###################################################################
+
+spack load raxml
+
+cd /scratch/marinemicrobes_t/api
+
+mpirun raxmlHPC-MPI -T 60 -m PROTGAMMAMTZOA -p 31415 -x 20398 -d -f a -N 1000 -n ichthyocolid_api_genes_tree3.tre -s 9E.apico.tree3.concatenated.fa 
+```
+
+
+
+
+
+
