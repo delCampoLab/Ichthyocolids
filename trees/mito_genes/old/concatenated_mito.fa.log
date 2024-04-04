@@ -1,0 +1,244 @@
+Physical cores: 4
+Logical cores:  8
+Memory:         32GB
+Extensions:     AVX
+
+WARNING: State N is missing in the alignment
+WARNING: Empirical frequencies will be disabled
+WARNING: Partition DATA: There are undetermined columns in the alignment (only gaps)
+WARNING: Partition DATA: There are undetermined columns in the alignment (only gaps)
+WARNING: MSA has not enough sites to infer reliable results
+Creating new checkpoint file: concatenated_mito.fa.ckp
+--------------------------------------------------------------------------------
+ModelTest-NG v0.1.7
+
+Input data:
+  MSA:        concatenated_mito.fa
+  Tree:       Maximum likelihood
+    file:           -
+  #taxa:            35
+  #sites:           1469
+  #patterns:        1323
+  Max. thread mem:  109 MB
+
+Output:
+  Log:           concatenated_mito.fa.log
+  Starting tree: concatenated_mito.fa.tree
+  Results:       concatenated_mito.fa.out
+
+Selection options:
+  # protein matrices: 19
+  # protein models:   152
+  include model parameters:
+    Uniform:         true
+    p-inv (+I):      true
+    gamma (+G):      true
+    both (+I+G):     true
+    free rates (+R): false
+    fixed freqs:     true
+    estimated freqs: false
+    #categories:     4
+  gamma rates mode:   mean
+  asc bias:           none
+  epsilon (opt):      0.01
+  epsilon (par):      0.05
+  keep branches:      false
+
+Additional options:
+  verbosity:        very low
+  threads:          2/4
+  RNG seed:         12345
+  subtree repeats:  enabled
+--------------------------------------------------------------------------------
+modeltest-ng was called as follows: 
+>> modeltest-ng -i concatenated_mito.fa -d aa -t ml -p 2 
+
+
+Partition 1/1
+
+ ----ID---  ----MODEL---- ---Time--- -Elapsed--- -------LnL------- -Alpha- -P-inv-
+
+Computation of likelihood scores completed. It took 0h:33:48
+
+BIC       model              K            lnL          score          delta    weight
+--------------------------------------------------------------------------------
+       1  MTZOA+I+G4         2    -34268.9562     69041.0836         0.0000    1.0000
+       2  MTZOA+G4           1    -34292.7400     69081.3590        40.2753    0.0000
+       3  MTART+I+G4         2    -34641.0692     69785.3097       744.2260    0.0000
+       4  MTART+G4           1    -34660.5766     69817.0321       775.9484    0.0000
+       5  LG+I+G4            2    -34687.8503     69878.8718       837.7882    0.0000
+       6  CPREV+I+G4         2    -34694.7427     69892.6566       851.5730    0.0000
+       7  PMB+I+G4           2    -34700.4321     69904.0356       862.9519    0.0000
+       8  LG+G4              1    -34740.4291     69976.7370       935.6534    0.0000
+       9  CPREV+G4           1    -34750.6431     69997.1652       956.0816    0.0000
+      10  PMB+G4             1    -34766.0079     70027.8947       986.8110    0.0000
+--------------------------------------------------------------------------------
+Best model according to BIC
+---------------------------
+Model:              MTZOA+I+G4
+lnL:                -34268.9562
+Frequencies:        0.0689 0.0210 0.0304 0.0207 0.0100 0.0186 0.0250 0.0720 0.0268 0.0851 0.1567 0.0193 0.0507 0.0817 0.0448 0.0805 0.0564 0.0280 0.0374 0.0661
+Inv. sites prop:    0.0624
+Gamma shape:        0.9500
+Score:              69041.0836
+Weight:             1.0000
+---------------------------
+Parameter importances
+---------------------------
+P.Inv:              -
+Gamma:              0.0000
+Gamma-Inv:          1.0000
+Frequencies:        -
+---------------------------
+Model averaged estimates
+---------------------------
+P.Inv:              -
+Alpha:              0.6702
+Alpha-P.Inv:        0.9500
+P.Inv-Alpha:        0.0624
+Frequencies:        -
+
+Commands:
+  > phyml  -i concatenated_mito.fa -d aa -m MTZOA -f m -v e -a e -c 4 -o tlr
+  > raxmlHPC-SSE3 -s concatenated_mito.fa -m PROTGAMMAIMTZOA -n EXEC_NAME -p PARSIMONY_SEED
+  > raxml-ng --msa concatenated_mito.fa --model MTZOA+I+G4
+  > paup -s concatenated_mito.fa
+  > iqtree -s concatenated_mito.fa -m MTZOA+I+G4
+
+AIC       model              K            lnL          score          delta    weight
+--------------------------------------------------------------------------------
+       1  MTZOA+I+G4         2    -34268.9562     68675.9124         0.0000    1.0000
+       2  MTZOA+G4           1    -34292.7400     68721.4800        45.5676    0.0000
+       3  MTART+I+G4         2    -34641.0692     69420.1384       744.2260    0.0000
+       4  MTART+G4           1    -34660.5766     69457.1532       781.2408    0.0000
+       5  LG+I+G4            2    -34687.8503     69513.7006       837.7882    0.0000
+       6  CPREV+I+G4         2    -34694.7427     69527.4853       851.5730    0.0000
+       7  PMB+I+G4           2    -34700.4321     69538.8643       862.9519    0.0000
+       8  LG+G4              1    -34740.4291     69616.8581       940.9457    0.0000
+       9  CPREV+G4           1    -34750.6431     69637.2863       961.3739    0.0000
+      10  PMB+G4             1    -34766.0079     69668.0157       992.1034    0.0000
+--------------------------------------------------------------------------------
+Best model according to AIC
+---------------------------
+Model:              MTZOA+I+G4
+lnL:                -34268.9562
+Frequencies:        0.0689 0.0210 0.0304 0.0207 0.0100 0.0186 0.0250 0.0720 0.0268 0.0851 0.1567 0.0193 0.0507 0.0817 0.0448 0.0805 0.0564 0.0280 0.0374 0.0661
+Inv. sites prop:    0.0624
+Gamma shape:        0.9500
+Score:              68675.9124
+Weight:             1.0000
+---------------------------
+Parameter importances
+---------------------------
+P.Inv:              -
+Gamma:              0.0000
+Gamma-Inv:          1.0000
+Frequencies:        -
+---------------------------
+Model averaged estimates
+---------------------------
+P.Inv:              -
+Alpha:              0.6702
+Alpha-P.Inv:        0.9500
+P.Inv-Alpha:        0.0624
+Frequencies:        -
+
+Commands:
+  > phyml  -i concatenated_mito.fa -d aa -m MTZOA -f m -v e -a e -c 4 -o tlr
+  > raxmlHPC-SSE3 -s concatenated_mito.fa -m PROTGAMMAIMTZOA -n EXEC_NAME -p PARSIMONY_SEED
+  > raxml-ng --msa concatenated_mito.fa --model MTZOA+I+G4
+  > paup -s concatenated_mito.fa
+  > iqtree -s concatenated_mito.fa -m MTZOA+I+G4
+
+AICc      model              K            lnL          score          delta    weight
+--------------------------------------------------------------------------------
+       1  MTZOA+I+G4         2    -34268.9562     68681.9124         0.0000    1.0000
+       2  MTZOA+G4           1    -34292.7400     68727.4800        45.5676    0.0000
+       3  MTART+I+G4         2    -34641.0692     69426.1384       744.2260    0.0000
+       4  MTART+G4           1    -34660.5766     69463.1532       781.2408    0.0000
+       5  LG+I+G4            2    -34687.8503     69519.7006       837.7882    0.0000
+       6  CPREV+I+G4         2    -34694.7427     69533.4853       851.5730    0.0000
+       7  PMB+I+G4           2    -34700.4321     69544.8643       862.9519    0.0000
+       8  LG+G4              1    -34740.4291     69622.8581       940.9457    0.0000
+       9  CPREV+G4           1    -34750.6431     69643.2863       961.3739    0.0000
+      10  PMB+G4             1    -34766.0079     69674.0157       992.1034    0.0000
+--------------------------------------------------------------------------------
+Best model according to AICc
+---------------------------
+Model:              MTZOA+I+G4
+lnL:                -34268.9562
+Frequencies:        0.0689 0.0210 0.0304 0.0207 0.0100 0.0186 0.0250 0.0720 0.0268 0.0851 0.1567 0.0193 0.0507 0.0817 0.0448 0.0805 0.0564 0.0280 0.0374 0.0661
+Inv. sites prop:    0.0624
+Gamma shape:        0.9500
+Score:              68681.9124
+Weight:             1.0000
+---------------------------
+Parameter importances
+---------------------------
+P.Inv:              -
+Gamma:              0.0000
+Gamma-Inv:          1.0000
+Frequencies:        -
+---------------------------
+Model averaged estimates
+---------------------------
+P.Inv:              -
+Alpha:              0.6702
+Alpha-P.Inv:        0.9500
+P.Inv-Alpha:        0.0624
+Frequencies:        -
+
+Commands:
+  > phyml  -i concatenated_mito.fa -d aa -m MTZOA -f m -v e -a e -c 4 -o tlr
+  > raxmlHPC-SSE3 -s concatenated_mito.fa -m PROTGAMMAIMTZOA -n EXEC_NAME -p PARSIMONY_SEED
+  > raxml-ng --msa concatenated_mito.fa --model MTZOA+I+G4
+  > paup -s concatenated_mito.fa
+  > iqtree -s concatenated_mito.fa -m MTZOA+I+G4
+
+There are 27 different topologies
+Topologies written to concatenated_mito.fa.topos
+
+topo_id   models_count   bic_support   aic_support   aicc_support
+-----------------------------------------------------------------
+      7              1       1.00000       1.00000       1.00000
+     15              1       0.00000       0.00000       0.00000
+      8              2       0.00000       0.00000       0.00000
+     14              2       0.00000       0.00000       0.00000
+     12              1       0.00000       0.00000       0.00000
+      6              1       0.00000       0.00000       0.00000
+     17              1       0.00000       0.00000       0.00000
+     11              5       0.00000       0.00000       0.00000
+     10              1       0.00000       0.00000       0.00000
+     16              4       0.00000       0.00000       0.00000
+      1              2       0.00000       0.00000       0.00000
+      2              2       0.00000       0.00000       0.00000
+      3              5       0.00000       0.00000       0.00000
+      4              2       0.00000       0.00000       0.00000
+      5              2       0.00000       0.00000       0.00000
+      9              4       0.00000       0.00000       0.00000
+     13              4       0.00000       0.00000       0.00000
+     18              1       0.00000       0.00000       0.00000
+     19              3       0.00000       0.00000       0.00000
+     20              2       0.00000       0.00000       0.00000
+     21             16       0.00000       0.00000       0.00000
+     22              4       0.00000       0.00000       0.00000
+     23              1       0.00000       0.00000       0.00000
+     24              1       0.00000       0.00000       0.00000
+     25              6       0.00000       0.00000       0.00000
+     26              1       0.00000       0.00000       0.00000
+     27              1       0.00000       0.00000       0.00000
+
+extended majority-rule consensus: (((((Margolisiella_islandica,(Merocystis_kathae,Aggregata_octopiana)[1.00000])[1.00000],((Thalassiosira_pseudonana,(Fucus_vesiculosus,(Ochromonas_danica,Nannochloropsis_oceanica)[1.00000])[1.00000])[1.00000],(Symbiodinium_sp,Hematodinium_sp)[1.00000])[1.00000])[1.00000],((Babesia_microti,(Theileria_parva,Theileria_annulata)[1.00000])[1.00000],((Hepatocystis_sp_ex_Pteropus_hypomelanus,(Plasmodium_yoelii_yoelii,Plasmodium_vivax)[1.00000])[1.00000],(Leucocytozoon_caulleryi,(Haemoproteus_tartakovskyi,(Haemoproteus_sp,(Parahaemoproteus_coatneyi,Haemoproteus_erythrogravidus)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(Haemogregarina_sp,(Klossiella_equi,Hepatozoon_catesbianae)[1.00000])[1.00000])[1.00000],(9E_Fish_Api,(Apicomplexa_sp_corallicolid_ex_Leiopathes_glaberrima,((Apicomplexa_sp_WK_2018_Corallicola_3,(Corallicolida_sp_2,Corallicolida_sp_1)[1.00000])[1.00000],(Apicomplexa_sp_WK_2018_Corallicola_2,(Corallicolid,Apicomplexa_sp_WK_2018_Corallicola_1)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((Isospora_superbusi,Eimeria_tenella)[1.00000],(Toxoplasma_gondii,Besnoitia_besnoiti)[1.00000])[1.00000]);
+strict consensus: ((((Margolisiella_islandica,(Merocystis_kathae,Aggregata_octopiana)[1.00000])[1.00000],((Babesia_microti,(Theileria_parva,Theileria_annulata)[1.00000])[1.00000],((Hepatocystis_sp_ex_Pteropus_hypomelanus,(Plasmodium_yoelii_yoelii,Plasmodium_vivax)[1.00000])[1.00000],(Leucocytozoon_caulleryi,(Haemoproteus_tartakovskyi,(Haemoproteus_sp,(Parahaemoproteus_coatneyi,Haemoproteus_erythrogravidus)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((Thalassiosira_pseudonana,(Fucus_vesiculosus,(Ochromonas_danica,Nannochloropsis_oceanica)[1.00000])[1.00000])[1.00000],(Symbiodinium_sp,Hematodinium_sp)[1.00000])[1.00000])[1.00000],(Haemogregarina_sp,(Klossiella_equi,Hepatozoon_catesbianae)[1.00000])[1.00000])[1.00000],(9E_Fish_Api,(Apicomplexa_sp_corallicolid_ex_Leiopathes_glaberrima,((Apicomplexa_sp_WK_2018_Corallicola_3,(Corallicolida_sp_2,Corallicolida_sp_1)[1.00000])[1.00000],(Apicomplexa_sp_WK_2018_Corallicola_2,(Corallicolid,Apicomplexa_sp_WK_2018_Corallicola_1)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((Isospora_superbusi,Eimeria_tenella)[1.00000],(Toxoplasma_gondii,Besnoitia_besnoiti)[1.00000])[1.00000]);
+
+Summary:
+
+Partition 1/1:
+                         Model         Score        Weight
+----------------------------------------------------------
+       BIC          MTZOA+I+G4    69041.0836        1.0000
+       AIC          MTZOA+I+G4    68675.9124        1.0000
+      AICc          MTZOA+I+G4    68681.9124        1.0000
+
+Execution results written to concatenated_mito.fa.out
+Starting tree written to concatenated_mito.fa.tree
