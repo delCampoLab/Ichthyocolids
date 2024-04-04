@@ -1,0 +1,42 @@
+Hit	Organism	Size
+SRR1994878_8929_2_size=550_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast_Bangiophyceae_	Schizothorax zarudnyi (freshwater)	550
+SRR8359818_8305_1_size=17_tax=Bacteria	Flatworm(Paraplanocera)	17
+SRR4949602_19473_1_size=8_tax=Bacteria	Panopea generosa (large saltwater clam)	8
+SRR8359799_522_1_size=8_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Sea cucumber mantel	8
+SRR5009240_32602_1_size=7_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast_Bangiophyceae_	Panopea generosa (large saltwater clam)	7
+SRR8359816_2653_1_size=6_tax=Bacteria	Flatworm (Thysanozoon nigrapappillosum)	6
+SRR2239793_494_1_size=5_tax=Bacteria	Coral Reef Fish Gut	5
+SRR8559032_12943_1_size=5_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	5
+SRR1819757_43125_1_size=4_tax=Bacteria	Coral Reef Water	4
+SRR4244467_941765_1_size=4_tax=Bacteria	Argopecten ventricosus (scallop)	4
+SRR6457429_32174_1_size=4_tax=Bacteria	Deep Gulf of Mexico 	4
+ERR2016824_88351_1_size=3_tax=Bacteria	marine sediment near drilling waste discharge	3
+SRR7097969_17522_1_size=3_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Yellowtail Kingfish (Seriola lalandi)	3
+SRR8243126_93913_1_size=3_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	antipathella subpinnata	3
+ERR2016823_278272_1_size=2_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	marine sediment near drilling waste discharge	2
+SRR2975944_137159_1_size=2_tax=Bacteria	"South West Pacific, New Caledonia Lagoon"	2
+SRR7098072_50232_1_size=2_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Yellowtail Kingfish (Seriola lalandi)	2
+SRR8359832_80721_1_size=2_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Padina sp. 1- Algae	2
+SRR8359869_1057_1_size=2_tax=Bacteria	Chaetodon_falcula	2
+SRR8559033_64474_1_size=2_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	2
+ERR2016806_177617_1_size=1_tax=Bacteria	marine sediment near drilling waste discharge	1
+ERR2016822_186430_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	marine sediment near drilling waste discharge	1
+ERR2016835_113729_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	marine sediment near drilling waste discharge	1
+ERR867911_3373_1_size=1_tax=Bacteria	"Shikmona, Westerlies - Mediterranean Sea, Black Sea Province (4m deep)"	1
+SRR1659044_1923_1_size=1_tax=Bacteria	Marine Lakes Mussels	1
+SRR1734292_86812_1_size=1_tax=Bacteria	Hawaii Beach Sand	1
+SRR6457499_79114_1_size=1_tax=Bacteria	Open Ocean	1
+SRR7037322_23051_1_size=1_tax=Bacteria	Open Ocean	1
+SRR7097967_108710_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Yellowtail Kingfish (Seriola lalandi)	1
+SRR7098077_21949_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Yellowtail Kingfish (Seriola lalandi)	1
+SRR7098085_65098_1_size=1_tax=Bacteria	Yellowtail Kingfish (Seriola lalandi)	1
+SRR7594481_23051_1_size=1_tax=Bacteria	Open Ocean	1
+SRR8359810_755_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Sea cucumber mantel	1
+SRR8359812_15513_1_size=1_tax=Bacteria	Sea cucumber mantel	1
+SRR8359850_8321_1_size=1_tax=Bacteria	Dictyopteris undulata	1
+SRR8359852_12164_1_size=1_tax=Bacteria	Caulerpa racemosa var laetevirens	1
+SRR8359860_30814_1_size=1_tax=Bacteria	Tubastrea sp. 3	1
+SRR8559028_95817_1_size=1_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	1
+SRR8559029_118799_1_size=1_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	1
+SRR8559038_144141_1_size=1_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	1
+SRR8559043_83585_1_size=1_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	1

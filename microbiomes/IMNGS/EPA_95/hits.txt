@@ -1,0 +1,66 @@
+Hit	Organism	Size	Sim	SRR	Associated Ichthy
+SRR1994878_8929_2_size=550_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast_Bangiophyceae_	Schizothorax zarudnyi (freshwater)	550	97	SRR1994878	
+SRR8359818_8305_1_size=17_tax=Bacteria	Flatworm(Paraplanocera)	17	97	SRR8359818	
+SRR4949602_19473_1_size=8_tax=Bacteria	Panopea generosa (large saltwater clam)	8	97	SRR4949602	
+SRR8359799_522_1_size=8_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Sea cucumber mantel	8	97	SRR8359799	
+SRR5009240_32602_1_size=7_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast_Bangiophyceae_	Panopea generosa (large saltwater clam)	7	97	SRR5009240	
+SRR8359816_2653_1_size=6_tax=Bacteria	Flatworm (Thysanozoon nigrapappillosum)	6	97	SRR8359816	
+SRR2239793_494_1_size=5_tax=Bacteria	Coral Reef Fish Gut	5	97	SRR2239793	
+SRR8559032_12943_1_size=5_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	5	97	SRR8559032	
+SRR1819757_43125_1_size=4_tax=Bacteria	Coral Reef Water	4	97	SRR1819757	
+SRR4244467_941765_1_size=4_tax=Bacteria	Argopecten ventricosus (scallop)	4	97	SRR4244467	
+SRR6457429_32174_1_size=4_tax=Bacteria	Deep Gulf of Mexico 	4	97	SRR6457429	
+ERR2016824_88351_1_size=3_tax=Bacteria	marine sediment near drilling waste discharge	3	97	ERR2016824	
+SRR7097969_17522_1_size=3_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Yellowtail Kingfish (Seriola lalandi)	3	97	SRR7097969	
+SRR8243126_93913_1_size=3_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	antipathella subpinnata	3	97	SRR8243126	
+ERR2016823_278272_1_size=2_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	marine sediment near drilling waste discharge	2	97	ERR2016823	
+SRR2975944_137159_1_size=2_tax=Bacteria	"South West Pacific, New Caledonia Lagoon"	2	97	SRR2975944	
+SRR7098072_50232_1_size=2_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Yellowtail Kingfish (Seriola lalandi)	2	97	SRR7098072	
+SRR8359832_80721_1_size=2_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Padina sp. 1- Algae	2	97	SRR8359832	
+SRR8359869_1057_1_size=2_tax=Bacteria	Chaetodon_falcula	2	97	SRR8359869	
+SRR8559033_64474_1_size=2_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	2	97	SRR8559033	
+ERR2016806_177617_1_size=1_tax=Bacteria	marine sediment near drilling waste discharge	1	97	ERR2016806	
+ERR2016822_186430_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	marine sediment near drilling waste discharge	1	97	ERR2016822	
+ERR2016835_113729_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	marine sediment near drilling waste discharge	1	97	ERR2016835	
+ERR867911_3373_1_size=1_tax=Bacteria	"Shikmona, Westerlies - Mediterranean Sea, Black Sea Province (4m deep)"	1	97	ERR867911	
+SRR1659044_1923_1_size=1_tax=Bacteria	Marine Lakes Mussels	1	97	SRR1659044	
+SRR1734292_86812_1_size=1_tax=Bacteria	Hawaii Beach Sand	1	97	SRR1734292	
+SRR6457499_79114_1_size=1_tax=Bacteria	Open Ocean	1	97	SRR6457499	
+SRR7037322_23051_1_size=1_tax=Bacteria	Open Ocean	1	97	SRR7037322	
+SRR7097967_108710_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Yellowtail Kingfish (Seriola lalandi)	1	97	SRR7097967	
+SRR7098077_21949_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Yellowtail Kingfish (Seriola lalandi)	1	97	SRR7098077	
+SRR7098085_65098_1_size=1_tax=Bacteria	Yellowtail Kingfish (Seriola lalandi)	1	97	SRR7098085	
+SRR7594481_23051_1_size=1_tax=Bacteria	Open Ocean	1	97	SRR7594481	
+SRR8359810_755_1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Sea cucumber mantel	1	97	SRR8359810	
+SRR8359812_15513_1_size=1_tax=Bacteria	Sea cucumber mantel	1	97	SRR8359812	
+SRR8359850_8321_1_size=1_tax=Bacteria	Dictyopteris undulata	1	97	SRR8359850	
+SRR8359852_12164_1_size=1_tax=Bacteria	Caulerpa racemosa var laetevirens	1	97	SRR8359852	
+SRR8359860_30814_1_size=1_tax=Bacteria	Tubastrea sp. 3	1	97	SRR8359860	
+SRR8559028_95817_1_size=1_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	1	97	SRR8559028	
+SRR8559029_118799_1_size=1_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	1	97	SRR8559029	
+SRR8559038_144141_1_size=1_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	1	97	SRR8559038	
+SRR8559043_83585_1_size=1_tax=Bacteria	sinking particles collected at abyssal depths (4000 m) in the North Pacific Subtropical Gyre	1	97	SRR8559043	
+SRR6419893.46468.1_size=7_tax=Bacteria	hydrothermal plumes after a deep-sea eruption	7	95	SRR6419893	
+SRR4435027.36266.1_size=4_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	4	95	SRR4435027	
+SRR4434881.20394.1_size=3_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	3	95	SRR4434881	
+SRR4434992.30680.1_size=3_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	3	95	SRR4434992	
+DRR089772.65927.1_size=2_tax=Bacteria	100m PA western North Pacific	2	95	DRR089772	
+ERR1103295.80018.1_size=2_tax=Bacteria	100m Atlantic Ocean	2	95	ERR1103295	
+SRR4434941.25525.1_size=2_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	2	95	SRR4434941	
+ERR1360104.12774.1_size=1_tax=Bacteria	SCS sediments	1	95	ERR1360104	
+ERR1519018.50344.1_size=1_tax=Bacteria	abyssopelagic zone of the Atlantic Ocean	1	95	ERR1519018	
+ERR2098594.331382.1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast_Bangiophyceae_	open ocean	1	95	ERR2098594	
+SRR2075958.2295173.1_size=1_tax=	"gut metagenome Atule mate, E. sexfasciatus and E. fuscoguttatus (grouper)"	1	95	SRR2075958	
+SRR2075959.936617.1_size=1_tax=Bacteria	"gut metagenome Atule mate, E. sexfasciatus and E. fuscoguttatus (grouper)"	1	95	SRR2075959	
+SRR4434911.20407.1_size=1_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR4434911	
+SRR4435070.37603.1_size=1_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR4435070	
+SRR4435101.1282.1_size=1_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR4435101	
+SRR4435116.24471.1_size=1_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR4435116	
+SRR4435128.23759.1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR4435128	
+SRR4435153.12901.1_size=1_tax=Bacteria	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR4435153	
+SRR4435176.34571.1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR4435176	
+SRR5435632.16486.1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR5435632	
+SRR5435633.15319.1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast	Station ALOHA in the North Pacific Subtropical Gyre	1	95	SRR5435633	
+SRR5814148.28827.1_size=1_tax=Bacteria	150 m in the North Pacific Subtropical Gyre	1	95	SRR5814148	
+SRR6078512.80659.1_size=1_tax=Bacteria	5m NW Mediterranean sea	1	95	SRR6078512	
+SRR8177950.42038.1_size=1_tax=Bacteria_Cyanobacteria/Chloroplast_Chloroplast_Chloroplast_Chloroplast_Bangiophyceae_	marine biofilms developped over antifouling surfaces under different shear stress incubations in the Toulon Bay (and in the SOLA buoy)	1	95	SRR8177950	
