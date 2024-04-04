@@ -697,6 +697,35 @@ cd /scratch/marinemicrobes_t/api
 mpirun raxmlHPC-MPI -T 60 -m PROTGAMMAMTZOA -p 31415 -x 20398 -d -f a -N 1000 -n ichthyocolid_api_genes_tree3.tre -s 9E.apico.tree3.concatenated.fa 
 ```
 
+# Model Testing
+```
+modeltest-ng -i api_18S_28S_tree.aligned.fa -t ml -p 2
+For operon tree: GTRGAMMAIX 
+
+modeltest-ng -i 9E.apico.tree3.concatenated.fa  -d aa -t ml -p 2
+for api gene tree: -m PROTGAMMAIVTF
+
+modeltest-ng -i concatenated_mito.fa  -d aa -t ml -p 2
+for mito gene tree: -m PROTGAMMAIMTZOA
+
+modeltest-ng -i Jan_seqs_plusmore.aligned.fa -t ml -p 2
+for apicoplast ssu gene tree: -m GTRGAMMAIX
+
+```
+Re-ran trees above with these models
+
+## Supplemental 18S-28S rRNA Gene Tree
+```
+vsearch -sortbylength apis_18S_28S.fa -output api_18S_28S_tree.sorted.fa -minseqlength 200 -maxseqlength 15000
+vsearch -cluster_smallmem api_18S_28S_tree.sorted.fa -id 0.98 -centroids api_18S_28S_tree.clustered.fa -uc api_18S_28S_tree.clustered.uc 
+mafft --auto api_18S_28S_tree.clustered.fa > api_18S_28S_tree.aligned.fa
+trimal -in api_18S_28S_tree.aligned.fa -out api_18S_28S_tree.trimal.fa -gt 0.3 -st 0.001 -cons 30
+raxmlHPC -T 2 -m GTRGAMMAIX -p 31415 -x 20398 -d -f a -N 1000 -n api_18S_28S_tree.tre -s api_18S_28S_tree.trimal.fa
+```
+
+
+
+
 
 
 
